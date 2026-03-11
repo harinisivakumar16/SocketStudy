@@ -33,36 +33,67 @@ To perform a study on Socket Programming
 
 ## Server-Side Operations:
 ```
+
 import socket
-from datetime import datetime
-s=socket.socket()
-s.bind(('localhost',8000))
-s.listen(5)
-c,addr=s.accept()
-print("Client Address : ",addr)
-now = datetime.now()
-c.send(now.strftime("%d/%m/%Y %H:%M:%S").encode())
-ack=c.recv(1024).decode()
-if ack:
- print(ack)
-c.close()
+
+# Create socket
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Bind socket to IP and port
+host = '127.0.0.1'
+port = 12345
+server_socket.bind((host, port))
+
+# Listen for connections
+server_socket.listen(1)
+print("Server is waiting for connection...")
+
+# Accept client connection
+conn, addr = server_socket.accept()
+print("Connected to:", addr)
+
+# Receive data from client
+data = conn.recv(1024).decode()
+print("Client says:", data)
+
+# Send response to client
+message = "Hello Client, message received!"
+conn.send(message.encode())
+
+# Close connection
+conn.close()
+server_socket.close()
 ```
 
 ## Client –Server Operations
-
+```
+2. Client Program (client.py)
 import socket
-s=socket.socket()
-s.connect(('localhost',8000))
-print(s.getsockname())
-print(s.recv(1024).decode())
-s.send("acknowledgement recived from the server".encode())
 
-## Use Cases of Socket Programming:
-Socket programming finds applications in various domains, including web development, file transfer protocols, online gaming, and real-time communication. It is the foundation for protocols like HTTP, FTP, and SMTP, which power the internet. Socket programming enables the development of both server and client applications, facilitating the exchange of information between devices in a networked environment.
-## Output
-<img width="680" height="74" alt="Screenshot 2026-02-28 204832" src="https://github.com/user-attachments/assets/55d6048d-dd2c-4537-9604-667c005f4022" />
+# Create socket
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-<img width="732" height="92" alt="Screenshot 2026-02-28 204844" src="https://github.com/user-attachments/assets/216ed488-735a-42d0-9c2f-d68878e78815" />
+# Connect to server
+host = '127.0.0.1'
+port = 12345
+client_socket.connect((host, port))
+
+# Send message to server
+message = "Hello Server!"
+client_socket.send(message.encode())
+
+# Receive response from server
+data = client_socket.recv(1024).decode()
+print("Server says:", data)
+
+# Close socket
+client_socket.close()
+`````
+## Output:
+
+<img width="1476" height="127" alt="Screenshot 2026-03-11 105558" src="https://github.com/user-attachments/assets/ce74ca01-a9e8-4802-9026-c285ee52f2af" />
+<img width="1325" height="221" alt="Screenshot 2026-03-11 105639" src="https://github.com/user-attachments/assets/588148c0-9e92-4a37-b8cd-bac44dc2faed" />
+
 
 
 ## Result:
